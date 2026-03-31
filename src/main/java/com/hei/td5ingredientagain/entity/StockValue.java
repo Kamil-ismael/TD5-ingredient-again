@@ -7,6 +7,10 @@ public class StockValue {
     public StockValue(double quantity, Unit unit) {
     }
 
+    public StockValue() {
+
+    }
+
     public Double getQuantity() {
         return quantity;
     }

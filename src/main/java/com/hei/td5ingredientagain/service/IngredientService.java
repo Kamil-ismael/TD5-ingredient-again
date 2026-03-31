@@ -1,51 +1,43 @@
 package com.hei.td5ingredientagain.service;
 
-import com.hei.td5ingredientagain.entity.*;
+import com.hei.td5ingredientagain.dto.StockInfo;
+import com.hei.td5ingredientagain.entity.Ingredient;
+import com.hei.td5ingredientagain.entity.MovementTypeEnum;
+import com.hei.td5ingredientagain.entity.Unit;
 import com.hei.td5ingredientagain.repository.IngredientRepository;
-import com.hei.td5ingredientagain.repository.StockMovementRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class IngredientService {
-    private final IngredientRepository ingredientrRepository;
-    private final StockMovementRepository stockMovementRepository;
 
+    private final IngredientRepository ingredientRepository;
 
     public List<Ingredient> getAllIngredients() {
-        return ingredientrRepository.findAll();
-
+        return ingredientRepository.findAll();
     }
 
     public Ingredient getIngredientById(Integer id) {
-        return ingredientrRepository.findById(id);
+        return ingredientRepository.findById(id);
     }
 
-    public StockValue getStock(Integer id, Instant at, Unit unit) {
+    public StockInfo getCurrentStock(Integer ingredientId, Instant at, Unit unit) {
+        Ingredient ingredient = ingredientRepository.findById(ingredientId);
 
-        Ingredient ingredient = ingredientRepository.findById(id);
-
-        List<StockMovement> movements =
-                stockMovementRepository.findByIngredientId(id);
-
-        double total = movements.stream()
-                .filter(m -> m.getCreationDatetime().isBefore(at))
-                .mapToDouble(m ->
-                        m.getType() == MovementTypeEnum.IN
-                                ? m.getValue().getQuantity()
-                                : -m.getValue().getQuantity()
-                )
+        double totalQuantity = ingredient.getStockMovementList().stream()
+                .filter(movement -> movement.getValue().getUnit() == unit)
+                .filter(movement -> !movement.getCreationDatetime().isAfter(at))
+                .mapToDouble(movement -> {
+                    double quantity = movement.getValue().getQuantity();
+                    return movement.getType() == MovementTypeEnum.IN ? quantity : -quantity;
+                })
                 .sum();
 
-        StockValue result = new StockValue();
-        result.setQuantity(total);
-        result.setUnit(unit);
-
-        return result;
+        return new StockInfo(unit, totalQuantity);
     }
-
 }
+
