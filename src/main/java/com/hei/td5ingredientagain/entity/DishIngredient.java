@@ -6,6 +6,9 @@ public class DishIngredient {
     private Double quantity;
     private Unit unit;
 
+    public DishIngredient(Ingredient ingredient, Object o, Double aDouble, Unit unit) {
+    }
+
     public Dish getDish() {
         return dish;
     }

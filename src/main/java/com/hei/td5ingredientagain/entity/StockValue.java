@@ -4,6 +4,9 @@ public class StockValue {
     private Double quantity;
     private Unit unit;
 
+    public StockValue(double quantity, Unit unit) {
+    }
+
     public Double getQuantity() {
         return quantity;
     }

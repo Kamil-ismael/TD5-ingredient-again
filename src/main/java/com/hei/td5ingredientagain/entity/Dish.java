@@ -14,6 +14,9 @@ public class Dish {
 
     }
 
+    public Dish(int dishId, String name, double sellingPrice, DishTypeEnum dishType, List<DishIngredient> ingredientsByDishId) {
+    }
+
 
     public Integer getId() {
         return id;

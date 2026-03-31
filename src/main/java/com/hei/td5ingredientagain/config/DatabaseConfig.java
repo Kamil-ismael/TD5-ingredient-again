@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 @Configuration
 public class DatabaseConfig {
     @Bean
-    public DataSource database() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/mini_dish_db");
@@ -17,6 +17,7 @@ public class DatabaseConfig {
         dataSource.setPassword("postgres");
         return dataSource;
     }
+
 
 }
 

@@ -12,6 +12,9 @@ public class StockMovement {
 
     }
 
+    public StockMovement(int id, MovementTypeEnum type, Instant creationDatetime, StockValue stockValue) {
+    }
+
     public Integer getId() {
         return id;
     }
