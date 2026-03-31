@@ -1,10 +1,13 @@
 package com.hei.td5ingredientagain.service;
 
 import com.hei.td5ingredientagain.dto.StockInfo;
+import com.hei.td5ingredientagain.dto.StockMovementCreation;
 import com.hei.td5ingredientagain.entity.Ingredient;
 import com.hei.td5ingredientagain.entity.MovementTypeEnum;
+import com.hei.td5ingredientagain.entity.StockMovement;
 import com.hei.td5ingredientagain.entity.Unit;
 import com.hei.td5ingredientagain.repository.IngredientRepository;
+import com.hei.td5ingredientagain.repository.StockMovementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import java.util.List;
 public class IngredientService {
 
     private final IngredientRepository ingredientRepository;
+    private final StockMovementRepository stockMovementRepository;
 
     public List<Ingredient> getAllIngredients() {
         return ingredientRepository.findAll();
@@ -39,5 +43,16 @@ public class IngredientService {
 
         return new StockInfo(unit, totalQuantity);
     }
+
+    public List<StockMovement> getStockMovementsForIngredient(Integer ingredientId, Instant from, Instant to) {
+        getIngredientById(ingredientId);
+        return stockMovementRepository.findByIngredientIdAndDateRange(ingredientId, from, to);
+    }
+
+    public List<StockMovement> addStockMovementsToIngredient(Integer ingredientId, List<StockMovementCreation> movementsToCreate) {
+        getIngredientById(ingredientId);
+        return stockMovementRepository.saveAll(ingredientId, movementsToCreate);
+    }
 }
+
 

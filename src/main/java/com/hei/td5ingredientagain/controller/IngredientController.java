@@ -1,7 +1,9 @@
 package com.hei.td5ingredientagain.controller;
 
 import com.hei.td5ingredientagain.dto.StockInfo;
+import com.hei.td5ingredientagain.dto.StockMovementCreation;
 import com.hei.td5ingredientagain.entity.Ingredient;
+import com.hei.td5ingredientagain.entity.StockMovement;
 import com.hei.td5ingredientagain.entity.Unit;
 import com.hei.td5ingredientagain.service.IngredientService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +47,22 @@ public class IngredientController {
 
         StockInfo stockInfo = ingredientService.getCurrentStock(id, at.get(), unit.get());
         return ResponseEntity.ok(stockInfo);
+    }
+
+    @GetMapping("/{id}/stockMovements")
+    public List<StockMovement> getStockMovements(
+            @PathVariable Integer id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant to) {
+        return ingredientService.getStockMovementsForIngredient(id, from, to);
+    }
+
+    @PostMapping("/{id}/stockMovements")
+    public ResponseEntity<List<StockMovement>> createStockMovements(
+            @PathVariable Integer id,
+            @RequestBody List<StockMovementCreation> movements) {
+        List<StockMovement> createdMovements = ingredientService.addStockMovementsToIngredient(id, movements);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdMovements);
     }
 }
 
