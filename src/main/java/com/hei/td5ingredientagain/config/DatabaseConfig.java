@@ -14,7 +14,7 @@ public class DatabaseConfig {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/mini_dish_db");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        dataSource.setPassword("police2005");
         return dataSource;
     }
 
